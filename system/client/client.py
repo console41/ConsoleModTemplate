@@ -2,9 +2,6 @@
 
 import mod.client.extraClientApi as clientApi
 
-from ...config.configUtils import *
-from ..registerer.registererUtils import AddClientSystem
-
 __eventList = []
 
 
@@ -23,7 +20,6 @@ def InitListen(instance):
         instance.ListenForEvent(namespace, systemName, eventName, instance, callback, priority)
 
 
-@AddClientSystem(MOD_NAME + 'ClientSystem', MOD_NAME, DIR_ROOT+'.system.client.client.Main')
 class Main(clientApi.GetClientSystemCls()):
     def __init__(self, namespace, systemName):
         super(Main, self).__init__(namespace, systemName)

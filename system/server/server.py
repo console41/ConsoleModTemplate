@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import mod.server.extraServerApi as serverApi
 
-from ...config.configUtils import *
-from ..registerer.registererUtils import AddServerSystem
-
 __eventList = []
 
 
@@ -22,7 +19,6 @@ def InitListen(instance):
         instance.ListenForEvent(namespace, systemName, eventName, instance, callback, priority)
 
 
-@AddServerSystem(MOD_NAME + 'ServerSystem', MOD_NAME, DIR_ROOT+'.system.server.server.Main')
 class Main(serverApi.GetServerSystemCls()):
     def __init__(self, namespace, systemName):
         super(Main, self).__init__(namespace, systemName)

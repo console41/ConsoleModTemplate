@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .modCommon import *
+from .file import *
 
 UI_NAME = ''
 CLS_PATH = DIR_ROOT + '.ui.main.Main'
