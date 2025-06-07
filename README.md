@@ -56,14 +56,14 @@ GAME_COMP = COMPONENT_FACTORY.CreateGame(LEVEL_ID)
 
 ### `AddServerSystem`和`AddClientSystem`
 
-打开server和client可以分别看到@AddServerSystem和@AddClientSystem装饰在类上 这两个装饰器可以快捷注册系统 
+打开modMain可以看到AddServerSystem和AddClientSystem 这两个装饰器可以快捷注册系统 
 
 两者需要传3个参数
 
 | 参数名        | 类型  | 描述                 |
 | ---------- | --- | ------------------ |
-| systemName | str | 系统名                |
 | namespace  | str | 命名空间 一般为`MOD_NAME` |
+| systemName | str | 系统名                |
 | clsPath    | str | 类路径                |
 
 
