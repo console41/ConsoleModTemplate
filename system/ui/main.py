@@ -15,10 +15,10 @@ def AddButtonTouchEvent(path):
 
     return __wrapper
 def InitButton(instance):
-    for path, callback in __buttonList:
+    for path, callback, param in __buttonList:
         control = instance.GetBaseUIControl(path).asButton()
-        control.AddTouchEventParams({'isSwallow': True})
-        control.SetButtonTouchDownCallback(getattr(instance.uiNode, callback))
+        control.AddTouchEventParams(param)
+        control.SetButtonTouchDownCallback(getattr(instance, callback))
 
 class Main(screenNode):
     def __init__(self, namespace, name, param):
