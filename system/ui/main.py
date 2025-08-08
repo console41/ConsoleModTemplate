@@ -8,12 +8,14 @@ screenNode = clientApi.GetScreenNodeCls()
 __buttonList = []
 
 
-def AddButtonTouchEvent(path):
+def AddButtonTouchEvent(path, param={'isSwallow': True}):
     def __wrapper(func):
-        __buttonList.append((path, func.__name__))
+        __buttonList.append((path, func.__name__, param))
         return func
 
     return __wrapper
+
+    
 def InitButton(instance):
     for path, callback, param in __buttonList:
         control = instance.GetBaseUIControl(path).asButton()
