@@ -1,4 +1,4 @@
-# ConsoleModModel 文档
+# ConsoleModTemplate 文档
 
 ## 简介
 
@@ -29,7 +29,7 @@ import mod.server.extraServerApi as serverApi
 
 LEVEL_ID = serverApi.GetLevelId()
 COMPONENT_FACTORY = serverApi.GetComponentFactory()
-GAME_COMP = COMPONENT_FACTORY.CreateGame(LEVEL_ID)
+GameComp = COMPONENT_FACTORY.CreateGame(LEVEL_ID)
 ```
 
 ### enum
@@ -56,7 +56,7 @@ GAME_COMP = COMPONENT_FACTORY.CreateGame(LEVEL_ID)
 
 ### `AddServerSystem`和`AddClientSystem`
 
-打开modMain可以看到AddServerSystem和AddClientSystem 这两个装饰器可以快捷注册系统 
+打开modMain可以看到AddServerSystem和AddClientSystem
 
 两者需要传3个参数
 
