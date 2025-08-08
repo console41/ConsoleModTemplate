@@ -23,7 +23,7 @@ AddClientSystem(MOD_NAME, MOD_NAME + '.clientSystem', DIR_ROOT + '.system.client
 AddServerSystem(MOD_NAME, MOD_NAME + '.serverSystem', DIR_ROOT + '.system.server.server.Main')
 
 
-@Mod.Binding(name=DIR_ROOT, version=VERSION)
+@Mod.Binding(name=MOD_NAME, version=VERSION)
 class Main(object):
     @Mod.InitServer()
     def ServerInit(self):
