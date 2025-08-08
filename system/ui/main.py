@@ -28,7 +28,7 @@ class Main(screenNode):
         self.uiNode = None
 
     def Create(self):
-        self.uiNode = clientApi.GetUI(DIR_ROOT, UI_NAME)
+        self.uiNode = clientApi.GetUI(MOD_NAME, UI_NAME)
         InitButton(self)
 
     def Destroy(self):
