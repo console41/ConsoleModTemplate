@@ -4,7 +4,7 @@ import mod.client.extraClientApi as clientApi
 import mod.server.extraServerApi as serverApi
 from mod.common.mod import Mod
 
-from ...config.configUtils import *
+from .config.configUtils import *
 
 serverSystems = []
 clientSystems = []
