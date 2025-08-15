@@ -34,7 +34,7 @@ GameComp = COMPONENT_FACTORY.CreateGame(LEVEL_ID)
 
 ### enum
 
-存放枚举值 可以以enumUtils整合(需自己添加)
+存放枚举值
 
 ### exception
 
@@ -46,92 +46,212 @@ GameComp = COMPONENT_FACTORY.CreateGame(LEVEL_ID)
 
 ### pack
 
-存放外部的库(library)/API/SDK 同样以utils整合
+存放外部的库(library)/API/SDK
 
 ### system
 
 存放客户端 服务端系统
 
-## 一些功能
+## 功能
 
-### `AddServerSystem`和`AddClientSystem`
+### AddServerSystem
 
-打开modMain可以看到AddServerSystem和AddClientSystem
+method in consoleModTemplate.modMain
 
-两者需要传3个参数
+- 参数
+  
+  | 参数名        | 数据类型 | 说明                 | 默认值 |
+  | ---------- | ---- | ------------------ | --- |
+  | namespace  | str  | 命名空间 一般为`MOD_NAME` |     |
+  | systemName | str  | 系统名                |     |
+  | clsPath    | str  | 类路径                |     |
 
-| 参数名        | 类型  | 描述                 |
-| ---------- | --- | ------------------ |
-| namespace  | str | 命名空间 一般为`MOD_NAME` |
-| systemName | str | 系统名                |
-| clsPath    | str | 类路径                |
+- 返回值
+  
+  无返回值
 
+### AddClientSystem
 
+method in consoleModTemplate.modMain
 
-### `Listen`和`InitListen`
+- 参数
+  
+  | 参数名        | 数据类型 | 说明                 | 默认值 |
+  | ---------- | ---- | ------------------ | --- |
+  | namespace  | str  | 命名空间 一般为`MOD_NAME` |     |
+  | systemName | str  | 系统名                |     |
+  | clsPath    | str  | 类路径                |     |
 
-```python
-def Listen(funcOrStr=None, namespace=clientApi.GetEngineNamespace(), systemName=clientApi.GetEngineSystemName(),
-           priority=0):
-    def wrapper(func):
-        __eventList.append(
-            (namespace, systemName, funcOrStr if isinstance(funcOrStr, str) else func.__name__, func, priority))
-        return func
+- 返回值
+  
+  无返回值
 
-    return wrapper(funcOrStr) if callable(funcOrStr) else wrapper
+### Listen
 
+#### 服务端接口
 
-def InitListen(instance):
-    for namespace, systemName, eventName, callback, priority in __eventList:
-        instance.ListenForEvent(namespace, systemName, eventName, instance, callback, priority)
+  method in consoleModTemplate.system.server
 
-```
+- 说明
+  
+  用于快捷添加事件回调函数
 
-`Listen`需传入3个参数
+- 参数
+  
+  | 参数名        | 类型        | 说明                    | 默认值                               |
+  | ---------- | --------- | --------------------- | --------------------------------- |
+  | funcOrStr  | func\|str | 事件名 不传时默认以下面的函数名作为事件名 |                                   |
+  | namespace  | str       | 监听的事件命名空间             | `serverApi.GetEngineNamespace()`  |
+  | systemName | str       | 监听的事件系统名              | `serverApi.GetEngineSystemName()` |
+  | priority   | int       | 事件优先级                 | `0`                               |
 
-| 参数名        | 类型       | 描述                                           |
-| ---------- | -------- | -------------------------------------------- |
-| funcOrStr  | func或str | 时间名 不传时默认以下面的函数名作为事件名                        |
-| namespace  | str      | 监听的事件命名空间 默认`clientApi.GetEngineNamespace()` |
-| systemName | str      | 监听的事件系统名 默认`clientApi.GetEngineSystemName()` |
-| priority   | int      | 事件优先级                                        |
+#### 客户端接口
 
-`InitListen`在系统__init__时调用 需传入1个参数
+  method in consoleModTemplate.system.client
 
-| 参数名      | 类型        | 描述     |
-| -------- | --------- | ------ |
-| instance | 客户端/服务端系统 | 监听类的实例 |
+- 说明
+  
+  用于快捷添加事件回调函数
 
-## `AddButtonTouchEvent`与`InitButton`
+- 参数
+  
+  | 参数名        | 类型        | 说明                    | 默认值                               |
+  | ---------- | --------- | --------------------- | --------------------------------- |
+  | funcOrStr  | func\|str | 事件名 不传时默认以下面的函数名作为事件名 |                                   |
+  | namespace  | str       | 监听的事件命名空间             | `clientApi.GetEngineNamespace()`  |
+  | systemName | str       | 监听的事件系统名              | `clientApi.GetEngineSystemName()` |
+  | priority   | int       | 事件优先级                 | `0`                               |
 
-用法与上者类似
+### InitListen
 
-`AddButtonTouchEvent`是一个装饰器 下面是按钮回调函数 自身需传入一个参数
+#### 服务端接口
 
-| 参数名  | 类型  | 描述   |
-| ---- | --- | ---- |
-| path | str | 按钮路径 |
+  method in consoleModTemplate.system.server
 
-`InitButton`在Create时调用 需传入一个参数
+- 说明
+  
+  用于初始化快速监听
 
-| 参数名      | 类型         | 描述       |
-| -------- | ---------- | -------- |
-| instance | ScreenNode | 需要监听的UI类 |
+- 参数
+  
+  | 参数名      | 数据类型         | 说明     | 默认值 |
+  | -------- | ------------ | ------ | --- |
+  | instance | ServerSystem | 需要监听的类 |     |
 
+#### 客户端接口
 
+  method in consoleModTemplate.system.client
+
+- 说明
+  
+  用于初始化快速监听
+
+- 参数
+  
+  | 参数名      | 数据类型         | 说明     | 默认值 |
+  | -------- | ------------ | ------ | --- |
+  | instance | ClientSystem | 需要监听的类 |     |
+
+## AddButtonTouchEvent
+
+客户端
+
+method in consoleModTemplate.system.ui
+
+- 说明
+  
+  用于给按钮快捷添加回调函数
+
+- 参数
+  
+  | 参数名  | 类型  | 说明   | 默认值 |
+  | ---- | --- | ---- | --- |
+  | path | str | 按钮路径 |     |
+
+### InitButton
+
+客户端
+
+method in consoleModTemplate.system.ui
+
+- 说明
+  
+  用于初始化快速设置按钮回调
+
+- 参数
+  
+  | 参数名      | 类型         | 说明       | 默认值 |
+  | -------- | ---------- | -------- | --- |
+  | instance | ScreenNode | 需要监听的UI类 |     |
+
+### AddCommandCallback
+
+服务端
+
+method in consoleModTemplate.function.command.server.callback
+
+- 说明
+  
+  用于快速给自定义指令添加回调函数
+
+- 参数
+  
+  | 参数名         | 数据类型      | 说明                      | 默认值 |
+  | ----------- | --------- | ----------------------- | --- |
+  | commandName | func\|str | 指令的名字 不传时默认以下面的函数名作为指令名 |     |
+
+- 示例
+  
+  ```python
+  @Listen
+  def CustomCommandTriggerServerEvent(self, args):
+  if command in commandDict:
+      commandDict[command](args)
+  
+  @AddCommandCallback
+  def MyCustomCommand(args):
+      command = args['command']
+      origin = args['origin']
+      variant = args['variant']
+      param = args['args']
+      # 编写业务代码
+      pass
+  
+  @AddCommandCallback('MyCustomCommand')
+  def MyCustomFuncName(args):
+      command = args['command']
+      origin = args['origin']
+      variant = args['variant']
+      param = args['args']
+      # 编写业务代码
+      pass
+  ```
 
 ## 使用方法
 
-将ModName直接复制到你的行为包 并修改`MOD_NAME`等配置
+- 复制到行为包
+  
+  ```bash
+  cd 行为包路径
+  git clone https://github.com/console41/console-mod-template.git
+  ```
 
-## 一些功能的原作者
+- 修改文件夹名 
+  
+  建议为`团队名+功能+Scipts`
 
-- 7stars - Listen装饰器
+- 配置
+  
+  打开config/modCommon文件 配置`MOD_NAME` `VERSION`等内容
+  
+  ```python
+  MOD_NAME = 'com.功能名.你的名字'
+  MOD_NAMESPACE = '模组的命名空间'
+  VERSION = '0.0.1' # 版本
+  ```
 
-注: CallServer等功能被我砍掉了 因为这样不方便查看哪些事件是另一端发来的 所以namespace和systemName需要自己填写
-
-- tyuall - 按钮回调
+- 打开`system`文件夹 开始写代码
 
 ## 结语
 
-该模板还未经过充分测试 可能有bug 大佬轻喷
+我是萌新 大佬轻喷

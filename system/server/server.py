@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import mod.server.extraServerApi as serverApi
 
+from ...function.serverFunctionUtils import *
+
 __eventList = []
 
 
@@ -23,3 +25,12 @@ class Main(serverApi.GetServerSystemCls()):
     def __init__(self, namespace, systemName):
         super(Main, self).__init__(namespace, systemName)
         InitListen(self)
+
+    @Listen
+    def CustomCommandTriggerServerEvent(self, args):
+        command = args['command']
+        origin = args['origin']
+        variant = args['variant']
+        param = args['args']
+        if command in commandDict:
+            commandDict[command]()
