@@ -22,7 +22,9 @@
 
 ### constant
 
-存放常量 例如`LEVEL_ID`各种ModSDK的组件也可以存放 示例
+存放常量 例如`LEVEL_ID`
+
+各种ModSDK的组件也可以存放 示例
 
 ```python
 import mod.server.extraServerApi as serverApi
@@ -44,9 +46,9 @@ GameComp = COMPONENT_FACTORY.CreateGame(LEVEL_ID)
 
 存放你自定义或者封装的功能
 
-### pack
+### library(原pack)
 
-存放外部的库(library)/API/SDK
+存放三方库 新版不再区分sdk/api/library 直接归类为library
 
 ### system
 
