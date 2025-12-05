@@ -1,34 +1,35 @@
 # -*- coding: utf-8 -*-
 
-import mod.client.extraClientApi as clientApi
-import mod.server.extraServerApi as serverApi
 from mod.common.mod import Mod
 
 from .config.configUtils import *
 
-serverSystems = []
-clientSystems = []
-
-
-def AddServerSystem(namespace, systemName, clsPath):
-    serverSystems.append((namespace, systemName, clsPath))
-
-
-def AddClientSystem(namespace, systemName, clsPath):
-    clientSystems.append((namespace, systemName, clsPath))
-
-
-# 注册系统
-AddClientSystem(MOD_NAME, MOD_NAME + '.clientSystem', DIR_ROOT + '.system.client.client.Main')
-AddServerSystem(MOD_NAME, MOD_NAME + '.serverSystem', DIR_ROOT + '.system.server.server.Main')
-
 
 @Mod.Binding(name=MOD_NAME, version=VERSION)
 class Main(object):
+    @staticmethod
+    def LoadServerModule():
+        """
+        加载服务端模块 import该模块即可加载
+        """
+        from .system.server import server
+
+    @staticmethod
+    def LoadClientModule():
+        """
+        加载客户端模块 import该模块即可加载
+        """
+        from .system.client import client
+
     @Mod.InitServer()
     def ServerInit(self):
-        for namespace, systemName, clsPath in serverSystems:
-            serverApi.RegisterSystem(namespace, systemName, clsPath)
+        from .library.consoleMod.serverApi import RegisterConsoleModServer
+        # 注册consoleMod服务端系统
+        serverSystem = RegisterConsoleModServer()
+        # 加载服务端模块 将监听数据存入服务端系统实例里
+        self.LoadServerModule()
+        # 加载完成 调用初始化监听器
+        serverSystem.InitialListener()
 
     @Mod.DestroyServer()
     def ServerDestroy(self):
@@ -36,8 +37,11 @@ class Main(object):
 
     @Mod.InitClient()
     def ClientInit(self):
-        for namespace, systemName, clsPath in clientSystems:
-            clientApi.RegisterSystem(namespace, systemName, clsPath)
+        # 注释同上
+        from .library.consoleMod.clientApi import RegisterConsoleModClient
+        clientSystem = RegisterConsoleModClient()
+        self.LoadClientModule()
+        clientSystem.InitialListener()
 
     @Mod.DestroyClient()
     def ClientDestroy(self):
