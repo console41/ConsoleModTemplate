@@ -186,48 +186,7 @@ method in consoleModTemplate.system.ui
   | -------- | ---------- | -------- | --- |
   | instance | ScreenNode | 需要监听的UI类 |     |
 
-### AddCommandCallback
-
-服务端
-
-method in consoleModTemplate.function.command.server.callback
-
-- 说明
-  
-  用于快速给自定义指令添加回调函数
-
-- 参数
-  
-  | 参数名         | 数据类型      | 说明                      | 默认值 |
-  | ----------- | --------- | ----------------------- | --- |
-  | commandName | func\|str | 指令的名字 不传时默认以下面的函数名作为指令名 |     |
-
-- 示例
-  
-  ```python
-  @Listen
-  def CustomCommandTriggerServerEvent(self, args):
-  if command in commandDict:
-      commandDict[command](args)
-  
-  @AddCommandCallback
-  def MyCustomCommand(args):
-      command = args['command']
-      origin = args['origin']
-      variant = args['variant']
-      param = args['args']
-      # 编写业务代码
-      pass
-  
-  @AddCommandCallback('MyCustomCommand')
-  def MyCustomFuncName(args):
-      command = args['command']
-      origin = args['origin']
-      variant = args['variant']
-      param = args['args']
-      # 编写业务代码
-      pass
-  ```
+# 
 
 ## 使用方法
 
