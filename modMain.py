@@ -23,13 +23,11 @@ class Main(object):
 
     @Mod.InitServer()
     def ServerInit(self):
-        from .library.consoleMod.serverApi import RegisterConsoleModServer
+        from .library.consoleMod.serverApi import RegisterServer
         # 注册consoleMod服务端系统
-        serverSystem = RegisterConsoleModServer()
+        RegisterServer()
         # 加载服务端模块 将监听数据存入服务端系统实例里
         self.LoadServerModule()
-        # 加载完成 调用初始化监听器
-        serverSystem.InitialListener()
 
     @Mod.DestroyServer()
     def ServerDestroy(self):
@@ -38,10 +36,9 @@ class Main(object):
     @Mod.InitClient()
     def ClientInit(self):
         # 注释同上
-        from .library.consoleMod.clientApi import RegisterConsoleModClient
-        clientSystem = RegisterConsoleModClient()
+        from .library.consoleMod.clientApi import RegisterClient
+        RegisterClient()
         self.LoadClientModule()
-        clientSystem.InitialListener()
 
     @Mod.DestroyClient()
     def ClientDestroy(self):
