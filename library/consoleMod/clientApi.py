@@ -3,6 +3,7 @@ import mod.client.extraClientApi as clientApi
 
 from .config.configUtils import *
 from .system.client.client import Main, updateFunc, destroyFunc
+from .system.ui.main import BaseScreenNode
 
 
 def SystemUpdate(func):
