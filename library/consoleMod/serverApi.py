@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import mod.server.extraServerApi as serverApi
+from mod_log import logger
 
 from .config.configUtils import *
-from .system.server.server import Main, updateFunc, destroyFunc
+from .system.server.server import updateFunc, destroyFunc
 
 
 def SystemUpdate(func):
@@ -18,7 +19,7 @@ def SystemDestroy(func):
 def RegisterServer():
     from ...config.configUtils import DIR_ROOT as BASE_DIR_ROOT
     serverApi.RegisterSystem(MOD_NAME, SERVER_SYSTEM_NAME,
-                                    BASE_DIR_ROOT + '.library.consoleMod.system.server.server.Main')
+                             BASE_DIR_ROOT + '.library.consoleMod.system.server.server.Main')
 
 
 class _ListenConfig(object):
@@ -29,6 +30,10 @@ class _ListenConfig(object):
 
 
 class _ListenEventPool(list):
+    def __init__(self):
+        super(_ListenEventPool, self).__init__()
+        self.duplicateCheckMap = {}
+
     def append(self, func):
         super(_ListenEventPool, self).append(func)
         # 变化时触发
@@ -69,15 +74,37 @@ _listenEventPool = _ListenEventPool()
 def Listen(funcOrStr=None, namespace=serverApi.GetEngineNamespace(), systemName=serverApi.GetEngineSystemName(),
            priority=0):
     def wrapper(func):
+        # 计算本次要注册的事件完整名称
+        currentEventName = funcOrStr if isinstance(funcOrStr, basestring) else func.__name__
+        # 组装事件唯一标识key
+        currentKey = (namespace, systemName, currentEventName)
+
+        # 获取重复注册检测映射
+        duplicateCheckMap = _listenEventPool.duplicateCheckMap
+        # 当前事件key不存在则初始化空列表
+        if currentKey not in duplicateCheckMap:
+            duplicateCheckMap[currentKey] = []
+
+        # 检测同一事件下是否已经存在该函数对象
+        if any(func is f for f in duplicateCheckMap[currentKey]):
+            # 打印提示信息
+            logger.warn(
+                'Duplicate listener registration: function [{}] event [{}], do not decorate the same function object to the same event multiple times'.format(
+                    func.__name__,
+                    currentEventName))
+
+        # 将当前函数存入检测映射做记录
+        duplicateCheckMap[currentKey].append(func)
+
         # 创建配置实例
         config = _ListenConfig()
-        config.EVENT_NAME = funcOrStr if isinstance(funcOrStr, basestring) else func.__name__
+        config.EVENT_NAME = currentEventName
         config.NAMESPACE = namespace
         config.SYSTEM_NAME = systemName
         config.PRIORITY = priority
-        # 挂载配置到函数
+        # 挂载配置对象到目标函数
         setattr(func, '_ListenConfig', config)
-        # 加入全局池子，供后续统一遍历注册
+        # 加入全局池子 触发内部append注册逻辑
         _listenEventPool.append(func)
         return func
 
